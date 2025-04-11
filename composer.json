@@ -1,5 +1,5 @@
 {
-    "name": "eventsourcerer/message-utilities",
+    "name": "eventsourcerer/symfony-messenger-transport",
     "description": "A transport to be used with Symfony Messenger to retrieve events from EventSourcerer",
     "type": "library",
     "autoload": {
