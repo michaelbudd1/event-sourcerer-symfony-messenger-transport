@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PearTreeWebLtd\EventSourcererSymfonyMessengerTransport;
 
-use App\Infrastructure\Messenger\EventSourcererTransport;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportFactoryInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
@@ -15,9 +14,9 @@ final readonly class EventSourcererTransportFactory implements TransportFactoryI
     private const string DSN_PREFIX = 'es://';
 
     public function __construct(
-        private string $eventSourcererUrl,
         private string $eventSourcererApplicationId,
-        private HttpClientInterface $httpClient
+        private HttpClientInterface $httpClient,
+
     ) {
     }
 
@@ -27,7 +26,7 @@ final readonly class EventSourcererTransportFactory implements TransportFactoryI
         SerializerInterface $serializer
     ): TransportInterface {
         return new EventSourcererTransport(
-            $this->eventSourcererUrl,
+            str_replace(self::DSN_PREFIX, '', $dsn ),
             $this->eventSourcererApplicationId,
             $this->httpClient
         );

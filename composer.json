@@ -1,5 +1,5 @@
 {
-    "name": "pear-tree-web-ltd/event-sourcerer-symfony-messenger-transport",
+    "name": "eventsourcerer/message-utilities",
     "description": "A transport to be used with Symfony Messenger to retrieve events from EventSourcerer",
     "type": "library",
     "autoload": {
@@ -17,6 +17,8 @@
         "phpunit/phpunit": "^12.0"
     },
     "require": {
-        "symfony/messenger": "^7.2"
+        "php": ">=8.4",
+        "symfony/messenger": "^7.2",
+        "symfony/http-client": "^7.2"
     }
 }
