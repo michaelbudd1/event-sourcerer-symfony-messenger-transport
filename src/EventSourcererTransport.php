@@ -29,7 +29,7 @@ final readonly class EventSourcererTransport implements TransportInterface
             $eventSourcererApplicationId,
             $httpClient,
             $serializer
-        )
+        );
     }
 
     public function get(): iterable
