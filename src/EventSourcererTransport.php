@@ -11,12 +11,26 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class EventSourcererTransport implements TransportInterface
 {
-    public function __construct(
+    private function __construct(
         private string $eventSourcererUrl,
         private string $eventSourcererApplicationId,
         private HttpClientInterface $httpClient,
         private SerializerInterface $serializer
     ) {}
+
+    public static function create(
+        string $eventSourcererUrl,
+        string $eventSourcererApplicationId,
+        HttpClientInterface $httpClient,
+        SerializerInterface $serializer
+    ): self {
+        return new self(
+            $eventSourcererUrl,
+            $eventSourcererApplicationId,
+            $httpClient,
+            $serializer
+        )
+    }
 
     public function get(): iterable
     {

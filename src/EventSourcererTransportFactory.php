@@ -16,19 +16,18 @@ final readonly class EventSourcererTransportFactory implements TransportFactoryI
     public function __construct(
         private string $eventSourcererApplicationId,
         private HttpClientInterface $httpClient,
-
-    ) {
-    }
+    ) {}
 
     public function createTransport(
         #[\SensitiveParameter] string $dsn,
         array $options,
         SerializerInterface $serializer
     ): TransportInterface {
-        return new EventSourcererTransport(
+        return EventSourcererTransport::create(
             str_replace(self::DSN_PREFIX, '', $dsn ),
             $this->eventSourcererApplicationId,
-            $this->httpClient
+            $this->httpClient,
+            $serializer
         );
     }
 
