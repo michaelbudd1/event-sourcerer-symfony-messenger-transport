@@ -37,7 +37,7 @@ final readonly class EventSourcererTransport implements TransportInterface
         $results = $this->httpClient->request(
             'GET',
             sprintf(
-                '%s/api/stream_events/queue/{id}/receive?itemsPerPage=1&applicationId=%s',
+                'https://%s/api/stream_events/queue/{id}/receive?itemsPerPage=1&applicationId=%s',
                 $this->eventSourcererUrl,
                 $this->eventSourcererApplicationId
             )
