@@ -37,18 +37,18 @@ final readonly class EventSourcererTransport implements TransportInterface
         $results = $this->httpClient->request(
             'GET',
             sprintf(
-                'https://%s/api/stream_events/queue/{id}/receive?itemsPerPage=1&applicationId=%s',
+                'https://%s/api/stream_events/queue/receive?itemsPerPage=1&applicationId=%s&streamId=*',
                 $this->eventSourcererUrl,
                 $this->eventSourcererApplicationId
             )
         );
 
-        foreach ($results->toArray() as $event) {
-            if (is_array($event)) {
-                yield new Envelope(
-                    $this->serializer->decode($event)
-                );
-            }
+        $event = json_decode($results->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        if (is_array($event)) {
+            yield new Envelope(
+                $this->serializer->decode($event)
+            );
         }
     }
 
