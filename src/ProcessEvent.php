@@ -9,5 +9,5 @@ final readonly class ProcessEvent
     /**
      * @param array{id: string, eventName: string, properties: array} $event
      */
-    public function __construct(array $event) {}
+    public function __construct(public array $event) {}
 }
