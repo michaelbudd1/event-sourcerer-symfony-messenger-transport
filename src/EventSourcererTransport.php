@@ -46,9 +46,7 @@ final readonly class EventSourcererTransport implements TransportInterface
         $event = json_decode($results->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         if (is_array($event)) {
-            yield new Envelope(
-                $this->serializer->decode($event)
-            );
+            yield $this->serializer->decode($event);
         }
     }
 

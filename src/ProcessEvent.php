@@ -6,5 +6,8 @@ namespace PearTreeWebLtd\EventSourcererSymfonyMessengerTransport;
 
 final readonly class ProcessEvent
 {
-    public function __construct($event) {}
+    /**
+     * @param array{id: string, eventName: string, properties: array} $event
+     */
+    public function __construct(array $event) {}
 }

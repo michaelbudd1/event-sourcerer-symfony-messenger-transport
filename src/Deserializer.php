@@ -11,7 +11,9 @@ final class Deserializer implements SerializerInterface
 {
     public function decode(array $encodedEnvelope): Envelope
     {
-        // TODO: Implement decode() method.
+        return new Envelope(
+            new ProcessEvent($encodedEnvelope)
+        );
     }
 
     public function encode(Envelope $envelope): array
