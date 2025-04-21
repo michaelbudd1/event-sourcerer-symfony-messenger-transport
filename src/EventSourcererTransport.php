@@ -57,8 +57,13 @@ final readonly class EventSourcererTransport implements TransportInterface
             sprintf(
                 '%s/stream_events/%s/ack',
                 $this->eventSourcererUrl,
-                'test'
-            )
+                '*'
+            ),
+            [
+                'body' => [
+                    'applicationId' => $this->eventSourcererApplicationId,
+                ],
+            ]
         );
     }
 
