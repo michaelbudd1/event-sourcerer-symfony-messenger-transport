@@ -52,16 +52,20 @@ final readonly class EventSourcererTransport implements TransportInterface
 
     public function ack(Envelope $envelope): void
     {
+        /** @var ProcessEvent $message */
+        $message = $envelope->getMessage();
+
         $this->httpClient->request(
             'POST',
             sprintf(
-                '%s/stream_events/%s/ack',
+                'https://%s/stream_events/%s/ack',
                 $this->eventSourcererUrl,
                 '*'
             ),
             [
                 'body' => [
                     'applicationId' => $this->eventSourcererApplicationId,
+                    'checkpoint'    => $message->event['allSequence'],
                 ],
             ]
         );
