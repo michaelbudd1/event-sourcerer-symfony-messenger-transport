@@ -78,6 +78,6 @@ final readonly class EventSourcererTransport implements TransportInterface
 
     public function send(Envelope $envelope): Envelope
     {
-        // TODO: Implement send() method.
+        return $envelope;
     }
 }
