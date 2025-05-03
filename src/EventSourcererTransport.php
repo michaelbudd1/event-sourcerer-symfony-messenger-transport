@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace PearTreeWebLtd\EventSourcererSymfonyMessengerTransport;
 
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class EventSourcererTransport implements TransportInterface
 {
+    private const int NOT_FOUND_RESPONSE = 404;
+
     private function __construct(
         private string $eventSourcererUrl,
         private string $eventSourcererApplicationId,
@@ -43,10 +47,16 @@ final readonly class EventSourcererTransport implements TransportInterface
             )
         );
 
-        $event = json_decode($results->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        try {
+            $event = json_decode($results->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        if (is_array($event)) {
-            yield $this->serializer->decode($event);
+            if (is_array($event)) {
+                yield $this->serializer->decode($event);
+            }
+        } catch (ClientExceptionInterface $e) {
+            if ($e->getCode() !== self::NOT_FOUND_RESPONSE) {
+                throw $e;
+            }
         }
     }
 
@@ -73,11 +83,10 @@ final readonly class EventSourcererTransport implements TransportInterface
 
     public function reject(Envelope $envelope): void
     {
-        // TODO: Implement reject() method.
     }
 
     public function send(Envelope $envelope): Envelope
     {
-        return $envelope;
+        throw new TransportException('Transport is designed to only receive events');
     }
 }
