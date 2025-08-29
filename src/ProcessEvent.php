@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PearTreeWebLtd\EventSourcererSymfonyMessengerTransport;
+namespace EventSourcerer\ClientBundle;
 
 final readonly class ProcessEvent
 {

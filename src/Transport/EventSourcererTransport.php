@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PearTreeWebLtd\EventSourcererSymfonyMessengerTransport;
+namespace EventSourcerer\ClientBundle\Transport;
 
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\TransportException;

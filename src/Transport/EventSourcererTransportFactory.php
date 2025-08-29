@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PearTreeWebLtd\EventSourcererSymfonyMessengerTransport;
+namespace EventSourcerer\ClientBundle\Transport;
 
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportFactoryInterface;
