@@ -29,3 +29,6 @@ services:
     factory: ['EventSourcerer\ClientBundle\Infrastructure\ClientFactory', 'create']
     arguments:
       $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
+
+  EventSourcerer\ClientBundle\Transport\EventSourcererTransportFactory:
+    tags: [ messenger.transport_factory ]
