@@ -17,10 +17,15 @@ services:
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     bind:
 
-  PearTreeWeb\EventSourcerer\Client\Infrastructure\Client:
-    factory: ['EventSourcerer\ClientBundle\Infrastructure\ClientFactory', 'create']
+  PearTreeWeb\EventSourcerer\Client\Infrastructure\Config:
+    factory: ['EventSourcerer\ClientBundle\Infrastructure\ConfigFactory', 'create']
     arguments:
       $host: '%eventsourcerer.host%'
       $url: '%eventsourcerer.url%'
       $port: '%eventsourcerer.port%'
       $applicationId: '%eventsourcerer.application_id%'
+
+  PearTreeWeb\EventSourcerer\Client\Infrastructure\Client:
+    factory: ['EventSourcerer\ClientBundle\Infrastructure\ClientFactory', 'create']
+    arguments:
+      $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
