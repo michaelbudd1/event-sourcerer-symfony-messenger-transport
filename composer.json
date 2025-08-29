@@ -20,13 +20,13 @@
     ],
     "require-dev": {
         "phpunit/phpunit": "^12.0",
-        "symfony/http-kernel": "^7.3"
+        "symfony/http-kernel": "7.3.*"
     },
     "require": {
         "php": ">=8.4",
-        "symfony/dependency-injection": "8.0.x-dev",
-        "symfony/messenger": "^7.3.2",
-        "symfony/http-client": "^7.3.2",
+        "symfony/dependency-injection": "7.3.*",
+        "symfony/messenger": "7.3.*",
+        "symfony/http-client": "7.3.*",
         "eventsourcerer/event-sourcerer-client": "dev-main"
     },
     "minimum-stability": "dev"
