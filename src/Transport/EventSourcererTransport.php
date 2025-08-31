@@ -40,7 +40,13 @@ final readonly class EventSourcererTransport implements TransportInterface
 
     public function get(): iterable
     {
-        yield $this->serializer->decode($this->client->fetchOneMessage());
+        $message = $this->client->fetchOneMessage();
+
+        if (null === $message) {
+            return [];
+        }
+
+        yield $this->serializer->decode($message);
     }
 
     public function ack(Envelope $envelope): void
