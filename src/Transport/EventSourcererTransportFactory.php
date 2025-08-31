@@ -20,7 +20,7 @@ final readonly class EventSourcererTransportFactory implements TransportFactoryI
         array $options,
         SerializerInterface $serializer
     ): TransportInterface {
-        return EventSourcererTransport::create($this->client, $serializer);
+        return EventSourcererTransport::create($this->client, new Deserializer());
     }
 
     public function supports(#[\SensitiveParameter] string $dsn, array $options): bool
