@@ -32,3 +32,7 @@ services:
 
   EventSourcerer\ClientBundle\Transport\EventSourcererTransportFactory:
     tags: [ messenger.transport_factory ]
+
+  EventSourcerer\ClientBundle\Command\ListenForEvents:
+    tags:
+      - { name: console.command }

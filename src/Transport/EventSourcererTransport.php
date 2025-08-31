@@ -4,81 +4,64 @@ declare(strict_types=1);
 
 namespace EventSourcerer\ClientBundle\Transport;
 
+use EventSourcerer\ClientBundle\Command\ListenForEvents;
+use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 final readonly class EventSourcererTransport implements TransportInterface
 {
-    private const int NOT_FOUND_RESPONSE = 404;
-
     private function __construct(
-        private string $eventSourcererUrl,
-        private string $eventSourcererApplicationId,
-        private HttpClientInterface $httpClient,
+        private Client $client,
         private SerializerInterface $serializer
     ) {}
 
     public static function create(
-        string $eventSourcererUrl,
-        string $eventSourcererApplicationId,
-        HttpClientInterface $httpClient,
+        Client $client,
         SerializerInterface $serializer
     ): self {
-        return new self(
-            $eventSourcererUrl,
-            $eventSourcererApplicationId,
-            $httpClient,
-            $serializer
-        );
+        $process = new Process([
+            'bin/console',
+            ListenForEvents::COMMAND,
+        ]);
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        return new self($client, $serializer);
     }
 
     public function get(): iterable
     {
-        $results = $this->httpClient->request(
-            'GET',
-            sprintf(
-                'https://%s/api/stream_events/queue/receive?itemsPerPage=1&applicationId=%s&streamId=*',
-                $this->eventSourcererUrl,
-                $this->eventSourcererApplicationId
-            )
-        );
-
-        try {
-            $event = json_decode($results->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-            if (is_array($event)) {
-                yield $this->serializer->decode($event);
-            }
-        } catch (ClientExceptionInterface $e) {
-            if ($e->getCode() !== self::NOT_FOUND_RESPONSE) {
-                throw $e;
-            }
-        }
+        yield $this->serializer->decode($this->client->fetchOneMessage());
     }
 
     public function ack(Envelope $envelope): void
     {
-        /** @var ProcessEvent $message */
-        $message = $envelope->getMessage();
-
-        $this->httpClient->request(
-            'POST',
-            sprintf(
-                'https://%s/stream_events/%s/ack',
-                $this->eventSourcererUrl,
-                '*'
-            ),
-            [
-                'body' => [
-                    'applicationId' => $this->eventSourcererApplicationId,
-                    'checkpoint'    => $message->event['allSequence'],
-                ],
-            ]
-        );
+//        /** @var ProcessEvent $message */
+//        $message = $envelope->getMessage();
+//
+//        $this->httpClient->request(
+//            'POST',
+//            sprintf(
+//                'https://%s/stream_events/%s/ack',
+//                $this->eventSourcererUrl,
+//                '*'
+//            ),
+//            [
+//                'body' => [
+//                    'applicationId' => $this->eventSourcererApplicationId,
+//                    'checkpoint'    => $message->event['allSequence'],
+//                ],
+//            ]
+//        );
     }
 
     public function reject(Envelope $envelope): void

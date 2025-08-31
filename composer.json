@@ -27,7 +27,9 @@
         "symfony/dependency-injection": "7.3.*",
         "symfony/messenger": "7.3.*",
         "symfony/http-client": "7.3.*",
-        "eventsourcerer/event-sourcerer-client": "dev-main"
+        "eventsourcerer/event-sourcerer-client": "dev-main",
+        "symfony/console": "7.3.*",
+        "symfony/process": "7.3.x-dev"
     },
     "minimum-stability": "dev"
 }
