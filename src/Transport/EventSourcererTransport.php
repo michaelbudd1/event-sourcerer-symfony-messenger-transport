@@ -59,7 +59,7 @@ final readonly class EventSourcererTransport implements TransportInterface
             ],
         );
 
-        $process->start();
+        $process->run();
     }
 
     public function reject(Envelope $envelope): void
