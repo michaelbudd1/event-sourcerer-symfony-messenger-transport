@@ -16,20 +16,23 @@ use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 final class Deserializer implements SerializerInterface
 {
     /**
-     * @param array{allSequence: int, eventVersion: int, name: string, number: int, payload: array<string, string>, stream: string, occurred: string, catchupRequestStream: string} $encodedEnvelope
+     * @param array{allSequence: int, number: int, eventVersion: int, name: string, number: int, payload: array<string, string>, stream: string, occurred: string, catchupRequestStream: string} $encodedEnvelope
      */
     public function decode(array $encodedEnvelope): Envelope
     {
+        $catchupRequestStream = $encodedEnvelope['catchupRequestStream'] ?? '*';
+
         return new Envelope(
             new ProcessEvent(
                 new Event(
                     Checkpoint::fromInt($encodedEnvelope['allSequence']),
+                    Checkpoint::fromInt($encodedEnvelope['number']),
                     EventVersion::fromInt($encodedEnvelope['eventVersion']),
                     EventName::fromString($encodedEnvelope['name']),
                     $encodedEnvelope['payload'],
                     StreamId::fromString($encodedEnvelope['stream']),
                     new \DateTimeImmutable($encodedEnvelope['occurred']),
-                    StreamId::fromString($encodedEnvelope['catchupRequestStream'])
+                    StreamId::fromString($catchupRequestStream)
                 )
             )
         );

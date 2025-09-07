@@ -11,12 +11,18 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final readonly class ClientFactory
 {
-    public static function create(Config $config): Client
-    {
+    public static function create(
+        Config $config,
+        string $cacheDir,
+        string $namespace
+    ): Client {
         return new Client(
             $config,
             new CachedAvailableEvents(
-                new FilesystemAdapter()
+                new FilesystemAdapter(
+                    namespace: $namespace,
+                    directory: strtolower($cacheDir)
+                )
             )
         );
     }

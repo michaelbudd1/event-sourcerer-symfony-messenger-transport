@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace EventSourcerer\ClientBundle\Transport;
 
+use EventSourcerer\ClientBundle\Command\AckEvent;
 use EventSourcerer\ClientBundle\Command\ListenForEvents;
+use EventSourcerer\ClientBundle\ProcessEvent;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 final readonly class EventSourcererTransport implements TransportInterface
@@ -24,50 +25,41 @@ final readonly class EventSourcererTransport implements TransportInterface
         Client $client,
         SerializerInterface $serializer
     ): self {
-        $process = new Process([
-            'bin/console',
-            ListenForEvents::COMMAND,
-        ]);
+        $process = new Process(
+            command: ['bin/console', ListenForEvents::COMMAND],
+            timeout: null
+        );
 
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+        $process->start();
 
         return new self($client, $serializer);
     }
 
     public function get(): iterable
     {
-        $message = $this->client->fetchOneMessage();
-
-        if (null === $message) {
-            return [];
+        if ($message = $this->client->fetchOneMessage()) {
+            yield $this->serializer->decode($message);
         }
-
-        yield $this->serializer->decode($message);
     }
 
     public function ack(Envelope $envelope): void
     {
-//        /** @var ProcessEvent $message */
-//        $message = $envelope->getMessage();
-//
-//        $this->httpClient->request(
-//            'POST',
-//            sprintf(
-//                'https://%s/stream_events/%s/ack',
-//                $this->eventSourcererUrl,
-//                '*'
-//            ),
-//            [
-//                'body' => [
-//                    'applicationId' => $this->eventSourcererApplicationId,
-//                    'checkpoint'    => $message->event['allSequence'],
-//                ],
-//            ]
-//        );
+        /** @var ProcessEvent $message */
+        $message = $envelope->getMessage();
+
+        $event = $message->event;
+
+        $process = new Process(
+            command: [
+                'bin/console',
+                AckEvent::COMMAND,
+                $event->streamId,
+                $event->allSequenceCheckpoint->toString(),
+                $event->catchupStreamCheckpoint->toString(),
+            ],
+        );
+
+        $process->start();
     }
 
     public function reject(Envelope $envelope): void
