@@ -30,6 +30,8 @@ final readonly class EventSourcererTransport implements TransportInterface
             timeout: null
         );
 
+        $process->setOptions(['create_new_console' => true]);
+
         $process->start();
 
         return new self($client, $serializer);
