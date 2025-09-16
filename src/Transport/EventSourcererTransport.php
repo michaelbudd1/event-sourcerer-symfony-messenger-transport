@@ -9,7 +9,6 @@ use EventSourcerer\ClientBundle\Command\ListenForEvents;
 use EventSourcerer\ClientBundle\ProcessEvent;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 use Symfony\Component\Process\Process;
@@ -23,16 +22,18 @@ final readonly class EventSourcererTransport implements TransportInterface
 
     public static function create(
         Client $client,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
     ): self {
-        $process = new Process(
-            command: ['bin/console', ListenForEvents::COMMAND],
-            timeout: null
-        );
+        if (!$client->hasEventsAvailable()) {
+            $process = new Process(
+                command: ['bin/console', ListenForEvents::COMMAND],
+                timeout: null
+            );
 
-        $process->setOptions(['create_new_console' => true]);
+            $process->setOptions(['create_new_console' => true]);
 
-        $process->start();
+            $process->start();
+        }
 
         return new self($client, $serializer);
     }
@@ -70,6 +71,8 @@ final readonly class EventSourcererTransport implements TransportInterface
 
     public function send(Envelope $envelope): Envelope
     {
-        throw new TransportException('Transport is designed to only receive events');
+        return $envelope;
+        dd($envelope->getMessage());
+//        throw new TransportException('Transport is designed to only receive events');
     }
 }

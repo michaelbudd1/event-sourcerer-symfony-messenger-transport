@@ -7,6 +7,7 @@ namespace EventSourcerer\ClientBundle\Infrastructure;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Config;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\CachedAvailableEvents;
+use PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\SymfonyLockStreamLocker;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final readonly class ClientFactory
@@ -22,8 +23,9 @@ final readonly class ClientFactory
                 new FilesystemAdapter(
                     namespace: $namespace,
                     directory: strtolower($cacheDir)
-                )
-            )
+                ),
+                SymfonyLockStreamLocker::create()
+            ),
         );
     }
 }

@@ -13,7 +13,7 @@ use PearTreeWebLtd\EventSourcererMessageUtilities\Model\StreamId;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 
-final class Deserializer implements SerializerInterface
+final class Serializer implements SerializerInterface
 {
     /**
      * @param array{allSequence: int, number: int, eventVersion: int, name: string, number: int, payload: array<string, string>, stream: string, occurred: string, catchupRequestStream: string} $encodedEnvelope
