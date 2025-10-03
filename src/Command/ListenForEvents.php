@@ -9,11 +9,11 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
 #[AsCommand(name: self::COMMAND)]
-final class ListenForEvents
+final readonly class ListenForEvents
 {
     public const string COMMAND = 'eventsourcerer:listen-for-events';
 
-    public function __construct(private readonly Client $client) {}
+    public function __construct(private Client $client) {}
 
     public function __invoke(): int
     {

@@ -30,13 +30,17 @@ services:
     factory: ['EventSourcerer\ClientBundle\Infrastructure\ClientFactory', 'create']
     arguments:
       $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
-      $cacheDir: '%kernel.cache_dir%'
+      $dbalConnection: '@doctrine.dbal.default_connection'
       $namespace: '%eventsourcerer.application_name%'
 
   EventSourcerer\ClientBundle\Transport\EventSourcererTransportFactory:
     tags: [ messenger.transport_factory ]
 
   EventSourcerer\ClientBundle\Command\ListenForEvents:
+    tags:
+      - { name: console.command }
+
+  EventSourcerer\ClientBundle\Command\ListAllEvents:
     tags:
       - { name: console.command }
 
