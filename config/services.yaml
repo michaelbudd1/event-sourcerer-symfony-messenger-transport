@@ -31,7 +31,6 @@ services:
     arguments:
       $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
       $dbalConnection: '@doctrine.dbal.default_connection'
-      $namespace: '%eventsourcerer.application_name%'
 
   EventSourcerer\ClientBundle\Transport\EventSourcererTransportFactory:
     tags: [ messenger.transport_factory ]
@@ -40,10 +39,14 @@ services:
     tags:
       - { name: console.command }
 
-  EventSourcerer\ClientBundle\Command\ListAllEvents:
+  EventSourcerer\ClientBundle\Command\CreateExternalSocketConnection:
     tags:
       - { name: console.command }
 
-  EventSourcerer\ClientBundle\Command\AckEvent:
+  EventSourcerer\ClientBundle\Command\GetSummary:
+    tags:
+      - { name: console.command }
+
+  EventSourcerer\ClientBundle\Command\ListAllEvents:
     tags:
       - { name: console.command }
