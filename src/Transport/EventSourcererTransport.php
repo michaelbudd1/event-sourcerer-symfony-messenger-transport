@@ -38,7 +38,7 @@ final readonly class EventSourcererTransport implements TransportInterface
     private static function startListener(): void
     {
         $process = new Process(
-            command: ['bin/console', ListenForEvents::COMMAND, self::workerId()],
+            command: ['bin/console', ListenForEvents::COMMAND],
             timeout: null,
         );
 

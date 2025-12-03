@@ -6,7 +6,6 @@ namespace EventSourcerer\ClientBundle\Command;
 
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleSignalEvent;
@@ -23,7 +22,7 @@ final readonly class ListenForEvents
     {
     }
 
-    public function __invoke(#[Argument] string $workerId, OutputInterface $output): int
+    public function __invoke(OutputInterface $output): int
     {
         $this->client->catchup($this->handleNewEvents());
 
