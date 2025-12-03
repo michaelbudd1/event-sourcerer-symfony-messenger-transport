@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace EventSourcerer\ClientBundle\Transport;
 
-use Doctrine\DBAL\Connection;
-use PearTreeWeb\EventSourcerer\Client\Domain\Model\WorkerId;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\DoctrineDbalStore;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportFactoryInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
@@ -20,8 +16,7 @@ final readonly class EventSourcererTransportFactory implements TransportFactoryI
 
     public function __construct(
         private Client $client,
-        private LoggerInterface $workerLogger,
-        private Connection $dbalConnection
+        private CacheItemPoolInterface $appCachePool
     ) {}
 
     public function createTransport(
@@ -32,19 +27,12 @@ final readonly class EventSourcererTransportFactory implements TransportFactoryI
         return EventSourcererTransport::create(
             $this->client,
             new Serializer(),
-            $this->workerLogger,
-            self::workerName(),
-            new LockFactory(new DoctrineDbalStore($this->dbalConnection))
+            $this->appCachePool
         );
     }
 
     public function supports(#[\SensitiveParameter] string $dsn, array $options): bool
     {
         return str_contains($dsn, self::DSN_PREFIX);
-    }
-
-    private static function workerName(): WorkerId
-    {
-        return WorkerId::fromString(uniqid('worker-', true));
     }
 }

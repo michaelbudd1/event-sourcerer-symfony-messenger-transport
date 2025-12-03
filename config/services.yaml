@@ -39,10 +39,6 @@ services:
     tags:
       - { name: console.command }
 
-  EventSourcerer\ClientBundle\Command\CreateExternalSocketConnection:
-    tags:
-      - { name: console.command }
-
   EventSourcerer\ClientBundle\Command\GetSummary:
     tags:
       - { name: console.command }

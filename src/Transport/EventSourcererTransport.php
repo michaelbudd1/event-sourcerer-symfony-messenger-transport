@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace EventSourcerer\ClientBundle\Transport;
 
-use EventSourcerer\ClientBundle\Command\CreateExternalSocketConnection;
+use EventSourcerer\ClientBundle\Command\ListenForEvents;
 use EventSourcerer\ClientBundle\NewMessage;
 use EventSourcerer\ClientBundle\ProcessEvent;
-use PearTreeWeb\EventSourcerer\Client\Domain\Model\WorkerId;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\ApplicationId;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\Checkpoint;
+use PearTreeWebLtd\EventSourcererMessageUtilities\Model\Event;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Model\StreamId;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Service\CreateMessage;
-use Psr\Log\LoggerInterface;
-use React\Socket\ConnectionInterface;
-use React\Socket\FixedUriConnector;
-use React\Socket\UnixConnector;
-use Symfony\Component\Lock\LockFactory;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
@@ -25,69 +19,53 @@ use Symfony\Component\Process\Process;
 
 final readonly class EventSourcererTransport implements TransportInterface
 {
-    private const string LISTENER_COMMAND_LOCK = 'listenerCommandLock';
-
     private function __construct(
         private Client $client,
         private SerializerInterface $serializer,
-        private LoggerInterface $workerLogger,
-        private WorkerId $workerId
+        private CacheItemPoolInterface $appCachePool
     ) {}
 
     public static function create(
         Client $client,
         SerializerInterface $serializer,
-        LoggerInterface $workerLogger,
-        WorkerId $workerId,
-        LockFactory $lockFactory
+        CacheItemPoolInterface $appCachePool
     ): self {
-        self::startListener($client, $lockFactory, $workerId);
+        self::startListener();
 
-        $client->attachWorker($workerId);
-
-        return new self($client, $serializer, $workerLogger, $workerId);
+        return new self($client, $serializer, $appCachePool);
     }
 
-    private static function startListener(Client $client, LockFactory $lockFactory, WorkerId $workerId): void
+    private static function startListener(): void
     {
-//        $lock = $lockFactory->createLock(self::LISTENER_COMMAND_LOCK);
-//
-//        if ($lock->acquire()) {
-//            $process = new Process(
-//                command: ['bin/console', CreateExternalSocketConnection::COMMAND],
-//                timeout: null,
-//            );
-//
-//            $process->setOptions(['create_new_console' => true]);
-//            $process->start();
-//
-//            register_shutdown_function(static function () use ($process, $lock, $client, $workerId) {
-//                $client->flagCatchupComplete();
-//                $client->detachWorker($workerId);
-//                $process->stop();
-//                $lock->release();
-//            });
-//        }
+        $process = new Process(
+            command: ['bin/console', ListenForEvents::COMMAND, self::workerId()],
+            timeout: null,
+        );
+
+        $process->setOptions(['create_new_console' => true]);
+        $process->start();
+
+        register_shutdown_function(static function () use ($process) {
+            $process->stop();
+        });
     }
 
     public function get(): iterable
     {
-        echo 'And PID here is ' . getmypid() . PHP_EOL;
+        $availableItems = $this->appCachePool->getItem(ListenForEvents::EVENTS)->get() ?? [];
 
-        dump('client connected ...', null !== $this->client->connected());
+        $workerId = self::workerId();
 
-        if ($message = $this->client->fetchOneMessage($this->workerId)) {
-            $this->workerLogger->info(
-                sprintf(
-                    'Message with all stream checkpoint %d was handled by worker %s',
-                    $message['allSequence'],
-                    $this->workerId
-                )
+        foreach ($availableItems as $item) {
+            $logText = sprintf(
+                'Message with all stream checkpoint %d was handled by worker %s',
+                $item['allSequence'],
+                $workerId
             );
-            dump('found message!');
-            yield $this->serializer->decode($message);
-        } else {
-            dump('no message found :-(');
+
+            echo $logText . PHP_EOL;
+
+            yield $this->serializer->decode($item);
         }
     }
 
@@ -98,17 +76,19 @@ final readonly class EventSourcererTransport implements TransportInterface
 
         $event = $message->event;
 
-        $this
-            ->client
-            ->acknowledgeEvent(
-                $event->streamId,
-                $event->catchupStreamCheckpoint,
-                $event->allSequenceCheckpoint
-            );
-    }
+        $this->removeItemFromCache($event);
 
-    public function reject(Envelope $envelope): void
-    {
+        $ackMessage = CreateMessage::forAcknowledgement(
+            $event->streamId,
+            StreamId::allStream(),
+            $this->client->applicationId(),
+            $event->catchupStreamCheckpoint,
+            $event->allSequenceCheckpoint
+        );
+
+        $sock = stream_socket_client('unix://' . Client::IPC_URI, $errno, $errst);
+        fwrite($sock, $ackMessage->toString());
+        fclose($sock);
     }
 
     public function send(Envelope $envelope): Envelope
@@ -126,5 +106,28 @@ final readonly class EventSourcererTransport implements TransportInterface
             );
 
         return $envelope;
+    }
+
+    private static function workerId(): string
+    {
+        return 'worker-' . getmypid();
+    }
+
+    private function removeItemFromCache(Event $event): void
+    {
+        $availableItemsCacheItem = $this->appCachePool->getItem(ListenForEvents::EVENTS);
+
+        $availableItems = $availableItemsCacheItem->get() ?? [];
+
+        unset($availableItems[$event->allSequenceCheckpoint->toInt()]);
+
+        $availableItemsCacheItem->set($availableItems);
+
+        $this->appCachePool->save($availableItemsCacheItem);
+    }
+
+    public function reject(Envelope $envelope): void
+    {
+        // TODO: Implement reject() method.
     }
 }

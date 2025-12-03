@@ -20,21 +20,21 @@ final readonly class ClientFactory
     {
         return new Client(
             $config,
-            new BucketedAvailableEvents(
-                new SharedCacheStreamBuckets(
-                    new DoctrineDbalAdapter($dbalConnection, 'streamBuckets'),
-                    new MessageBucket(new DoctrineDbalAdapter($dbalConnection, 'messageBucket1')),
-                    new MessageBucket(new DoctrineDbalAdapter($dbalConnection, 'messageBucket2')),
-                    new MessageBucket(new DoctrineDbalAdapter($dbalConnection, 'messageBucket3')),
-                ),
-                new SharedCacheStreamWorkerManager(
-                    new DoctrineDbalAdapter($dbalConnection, 'streamWorkerManager'),
-                    new DoctrineDbalAdapter($dbalConnection, 'workers')
-                )
-            ),
-            new SharedProcessCommunicationCache(
-                new DoctrineDbalAdapter($dbalConnection, 'sharedProcessCommunication')
-            )
+//            new BucketedAvailableEvents(
+//                new SharedCacheStreamBuckets(
+//                    new DoctrineDbalAdapter($dbalConnection, 'streamBuckets'),
+//                    new MessageBucket(new DoctrineDbalAdapter($dbalConnection, 'messageBucket1')),
+//                    new MessageBucket(new DoctrineDbalAdapter($dbalConnection, 'messageBucket2')),
+//                    new MessageBucket(new DoctrineDbalAdapter($dbalConnection, 'messageBucket3')),
+//                ),
+//                new SharedCacheStreamWorkerManager(
+//                    new DoctrineDbalAdapter($dbalConnection, 'streamWorkerManager'),
+//                    new DoctrineDbalAdapter($dbalConnection, 'workers')
+//                )
+//            ),
+//            new SharedProcessCommunicationCache(
+//                new DoctrineDbalAdapter($dbalConnection, 'sharedProcessCommunication')
+//            )
         );
     }
 }

@@ -11,6 +11,7 @@ use PearTreeWebLtd\EventSourcererMessageUtilities\Model\EventName;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Model\EventVersion;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Model\StreamId;
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Stamp\TransportMessageIdStamp;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 
 final class Serializer implements SerializerInterface
@@ -34,8 +35,16 @@ final class Serializer implements SerializerInterface
                     new \DateTimeImmutable($encodedEnvelope['occurred']),
                     StreamId::fromString($catchupRequestStream)
                 )
-            )
+            ),
+            [
+                new TransportMessageIdStamp(self::messageId($encodedEnvelope['allSequence'])),
+            ]
         );
+    }
+
+    private static function messageId(int $allSequence): string
+    {
+        return 'message-' . $allSequence;
     }
 
     public function encode(Envelope $envelope): array
