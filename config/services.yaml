@@ -46,3 +46,8 @@ services:
   EventSourcerer\ClientBundle\Command\ListAllEvents:
     tags:
       - { name: console.command }
+
+  PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages:
+    class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\PsrCacheWorkerMessages
+
+

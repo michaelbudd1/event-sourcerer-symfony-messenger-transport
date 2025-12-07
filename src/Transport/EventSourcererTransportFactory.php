@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace EventSourcerer\ClientBundle\Transport;
 
+use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
@@ -16,7 +17,7 @@ final readonly class EventSourcererTransportFactory implements TransportFactoryI
 
     public function __construct(
         private Client $client,
-        private CacheItemPoolInterface $appCachePool
+        private WorkerMessages $workerMessages
     ) {}
 
     public function createTransport(
@@ -27,7 +28,7 @@ final readonly class EventSourcererTransportFactory implements TransportFactoryI
         return EventSourcererTransport::create(
             $this->client,
             new Serializer(),
-            $this->appCachePool
+            $this->workerMessages
         );
     }
 

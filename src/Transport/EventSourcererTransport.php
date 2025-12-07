@@ -7,11 +7,11 @@ namespace EventSourcerer\ClientBundle\Transport;
 use EventSourcerer\ClientBundle\Command\ListenForEvents;
 use EventSourcerer\ClientBundle\NewMessage;
 use EventSourcerer\ClientBundle\ProcessEvent;
+use PearTreeWeb\EventSourcerer\Client\Domain\Model\WorkerId;
+use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Model\Event;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Model\StreamId;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Service\CreateMessage;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
@@ -19,26 +19,43 @@ use Symfony\Component\Process\Process;
 
 final readonly class EventSourcererTransport implements TransportInterface
 {
+    private const int WORKER_ID_RANDOM_BYTES_LENGTH = 5;
+
+    /**
+     * @param resource $localConnection
+     */
     private function __construct(
         private Client $client,
         private SerializerInterface $serializer,
-        private CacheItemPoolInterface $appCachePool
+        private WorkerMessages $workerMessages,
+        private mixed $localConnection,
+        private WorkerId $workerId
     ) {}
 
     public static function create(
         Client $client,
         SerializerInterface $serializer,
-        CacheItemPoolInterface $appCachePool
+        WorkerMessages $workerMessages
     ): self {
-        self::startListener();
+        $workerId = self::workerId();
 
-        return new self($client, $serializer, $appCachePool);
+        self::startListener($workerId);
+
+        sleep(2);
+
+        return new self(
+            $client,
+            $serializer,
+            $workerMessages,
+            $client->createLocalConnection(),
+            $workerId
+        );
     }
 
-    private static function startListener(): void
+    private static function startListener(WorkerId $workerId): void
     {
         $process = new Process(
-            command: ['bin/console', ListenForEvents::COMMAND],
+            command: ['bin/console', ListenForEvents::COMMAND, $workerId->toString()],
             timeout: null,
         );
 
@@ -52,19 +69,7 @@ final readonly class EventSourcererTransport implements TransportInterface
 
     public function get(): iterable
     {
-        $availableItems = $this->appCachePool->getItem(ListenForEvents::EVENTS)->get() ?? [];
-
-        $workerId = self::workerId();
-
-        foreach ($availableItems as $item) {
-            $logText = sprintf(
-                'Message with all stream checkpoint %d was handled by worker %s',
-                $item['allSequence'],
-                $workerId
-            );
-
-            echo $logText . PHP_EOL;
-
+        foreach ($this->workerMessages->getFor($this->workerId) as $item) {
             yield $this->serializer->decode($item);
         }
     }
@@ -78,17 +83,13 @@ final readonly class EventSourcererTransport implements TransportInterface
 
         $this->removeItemFromCache($event);
 
-        $ackMessage = CreateMessage::forAcknowledgement(
+        $this->client->acknowledgeEvent(
             $event->streamId,
             StreamId::allStream(),
-            $this->client->applicationId(),
             $event->catchupStreamCheckpoint,
-            $event->allSequenceCheckpoint
+            $event->allSequenceCheckpoint,
+            $this->localConnection
         );
-
-        $sock = stream_socket_client('unix://' . Client::IPC_URI, $errno, $errst);
-        fwrite($sock, $ackMessage->toString());
-        fclose($sock);
     }
 
     public function send(Envelope $envelope): Envelope
@@ -108,26 +109,19 @@ final readonly class EventSourcererTransport implements TransportInterface
         return $envelope;
     }
 
-    private static function workerId(): string
+    private static function workerId(): WorkerId
     {
-        return 'worker-' . getmypid();
+        return WorkerId::fromString(
+            'worker-' . random_bytes(self::WORKER_ID_RANDOM_BYTES_LENGTH)
+        );
     }
 
     private function removeItemFromCache(Event $event): void
     {
-        $availableItemsCacheItem = $this->appCachePool->getItem(ListenForEvents::EVENTS);
-
-        $availableItems = $availableItemsCacheItem->get() ?? [];
-
-        unset($availableItems[$event->allSequenceCheckpoint->toInt()]);
-
-        $availableItemsCacheItem->set($availableItems);
-
-        $this->appCachePool->save($availableItemsCacheItem);
+        $this->workerMessages->removeFor($this->workerId, $event->allSequenceCheckpoint->toInt());
     }
 
     public function reject(Envelope $envelope): void
     {
-        // TODO: Implement reject() method.
     }
 }
