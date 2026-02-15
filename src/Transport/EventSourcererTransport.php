@@ -7,11 +7,11 @@ namespace EventSourcerer\ClientBundle\Transport;
 use EventSourcerer\ClientBundle\Command\ListenForEvents;
 use EventSourcerer\ClientBundle\NewMessage;
 use EventSourcerer\ClientBundle\ProcessEvent;
-use PearTreeWeb\EventSourcerer\Client\Domain\Model\WorkerId;
 use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Model\Event;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Model\StreamId;
+use PearTreeWebLtd\EventSourcererMessageUtilities\Model\WorkerId;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
@@ -62,9 +62,7 @@ final readonly class EventSourcererTransport implements TransportInterface
         $process->setOptions(['create_new_console' => true]);
         $process->start();
 
-        register_shutdown_function(static function () use ($process) {
-            $process->stop();
-        });
+        register_shutdown_function(static fn () => $process->stop());
     }
 
     public function get(): iterable
@@ -86,6 +84,7 @@ final readonly class EventSourcererTransport implements TransportInterface
         $this->client->acknowledgeEvent(
             $event->streamId,
             StreamId::allStream(),
+            $this->workerId,
             $event->catchupStreamCheckpoint,
             $event->allSequenceCheckpoint,
             $this->localConnection
@@ -112,7 +111,7 @@ final readonly class EventSourcererTransport implements TransportInterface
     private static function workerId(): WorkerId
     {
         return WorkerId::fromString(
-            'worker-' . random_bytes(self::WORKER_ID_RANDOM_BYTES_LENGTH)
+            'worker-' . bin2hex(random_bytes(self::WORKER_ID_RANDOM_BYTES_LENGTH))
         );
     }
 
