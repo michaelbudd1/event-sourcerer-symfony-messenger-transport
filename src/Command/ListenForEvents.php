@@ -42,6 +42,19 @@ final readonly class ListenForEvents
     private function handleNewEvents(): callable
     {
         return function (array $decodedEvent): void {
+            /**
+             * @var array{
+             *     allSequence: int,
+             *     eventVersion: int,
+             *     name: string,
+             *     number: int,
+             *     payload: array,
+             *     stream: string,
+             *     occurred: string,
+             *     workerId: string,
+             *     catchupRequestStream: string,
+             * } $decodedEvent
+             */
             $this->workerMessages->addFor(
                 WorkerId::fromString($decodedEvent['workerId']),
                 $decodedEvent

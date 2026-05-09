@@ -79,7 +79,7 @@ final readonly class EventSourcererTransport implements TransportInterface
 
         $event = $message->event;
 
-        $this->removeItemFromCache($event);
+//        $this->removeItemFromCache($event);
 
         $this->client->acknowledgeEvent(
             $event->streamId,
