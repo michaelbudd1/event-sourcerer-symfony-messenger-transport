@@ -47,7 +47,7 @@ services:
     tags:
       - { name: console.command }
 
-  EventSourcerer\ClientBundle\Command\Testing\CheckWorkerSequencing:
+  EventSourcerer\ClientBundle\Command\Testing\ValidateWorkerSequencing:
     tags:
       - { name: console.command }
 
