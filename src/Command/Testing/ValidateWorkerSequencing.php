@@ -5,7 +5,6 @@ namespace EventSourcerer\ClientBundle\Command\Testing;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\HttpKernel\Kernel;
 
 #[AsCommand(
     name: 'eventsourcerer:testing:check-worker-sequencing',
@@ -13,10 +12,8 @@ use Symfony\Component\HttpKernel\Kernel;
 )]
 final readonly class ValidateWorkerSequencing
 {
-    public function __invoke(SymfonyStyle $style): int
+    public function __invoke(string $projectDir, SymfonyStyle $style): int
     {
-        $projectDir = Kernel::getProjectDir();
-
         $processed = [];
 
         $errorsFound = 0;
