@@ -12,14 +12,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 final readonly class ValidateWorkerSequencing
 {
-    public function __invoke(string $projectDir, SymfonyStyle $style): int
+    public function __invoke(string $eventsourcererProjectDir, SymfonyStyle $style): int
     {
         $processed = [];
 
         $errorsFound = 0;
 
-        foreach (self::logFiles($projectDir) as $logFile) {
-            $fh = fopen($projectDir . '/var/log/' . $logFile, 'rb');
+        foreach (self::logFiles($eventsourcererProjectDir) as $logFile) {
+            $fh = fopen($eventsourcererProjectDir . '/var/log/' . $logFile, 'rb');
 
             while (!feof($fh)) {
                 $line = fgets($fh);
@@ -73,9 +73,9 @@ final readonly class ValidateWorkerSequencing
         return Command::SUCCESS;
     }
 
-    private static function logFiles(string $projectDir): iterable
+    private static function logFiles(string $eventsourcererProjectDir): iterable
     {
-        $logsDir = __DIR__ . '/var/log';
+        $logsDir = $eventsourcererProjectDir . '/var/log';
 
         foreach (scandir($logsDir) as $logFile) {
             if (preg_match('/worker-\d+\.log$/', $logFile)) {
