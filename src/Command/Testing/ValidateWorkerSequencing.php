@@ -21,34 +21,42 @@ final readonly class ValidateWorkerSequencing
         $errorsFound = 0;
 
         foreach (self::logFiles($this->eventsourcererProjectDir) as $logFile) {
-            $fh = fopen($this->eventsourcererProjectDir . '/var/log/' . $logFile, 'rb');
+            $fh = fopen($this->eventsourcererProjectDir . '/var/log/' . $logFile, 'r');
+
+            $lineNumber = 0;
 
             while (!feof($fh)) {
-                $line = fgets($fh);
+                $line = rtrim(fgets($fh), "\r\n");
+
+                if ($line === false) {
+                    break;
+                }
+
+                $lineNumber++;
                 $parts = explode(' ', $line);
 
                 if (!isset($parts[1])) {
-                    continue;
+                    break;
                 }
 
                 $stream = $parts[1];
                 $sequence = (int) $parts[3];
 
-                if (isset($processed[$stream][$sequence])) {
-                    $errorsFound++;
+                $processed[$stream][$sequence][] = ['file' => $logFile, 'line' => $lineNumber];
 
+                if (1 !== count($processed[$stream][$sequence])) {
                     $style->warning(
                         sprintf(
-                            'Stream %s sequence %d was processed several times',
+                            'Stream %s sequence %d was processed several times (first: %s:%d, duplicate: %s:%d)',
                             $stream,
-                            $sequence
+                            $sequence,
+                            $processed[$stream][$sequence][0]['file'],
+                            $processed[$stream][$sequence][0]['line'],
+                            $logFile,
+                            $lineNumber
                         )
                     );
                 }
-
-                $processed[$stream][$sequence] = isset($processed[$stream][$sequence])
-                    ? $processed[$stream][$sequence] + 1
-                    : 1;
 
                 $maxSequence = max(array_keys($processed[$stream]));
 
