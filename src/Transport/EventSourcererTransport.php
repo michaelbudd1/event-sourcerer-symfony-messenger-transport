@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 use Symfony\Component\Process\Process;
 
-final readonly class EventSourcererTransport implements TransportInterface
+final class EventSourcererTransport implements TransportInterface
 {
     private const int WORKER_ID_RANDOM_BYTES_LENGTH = 5;
 
@@ -25,11 +25,12 @@ final readonly class EventSourcererTransport implements TransportInterface
      * @param resource $localConnection
      */
     private function __construct(
-        private Client $client,
-        private SerializerInterface $serializer,
-        private WorkerMessages $workerMessages,
-        private mixed $localConnection,
-        private WorkerId $workerId
+        private readonly Client $client,
+        private readonly SerializerInterface $serializer,
+        private readonly WorkerMessages $workerMessages,
+        private readonly mixed $localConnection,
+        private readonly WorkerId $workerId,
+        private array $processed,
     ) {}
 
     public static function create(
@@ -48,7 +49,8 @@ final readonly class EventSourcererTransport implements TransportInterface
             $serializer,
             $workerMessages,
             $client->createLocalConnection(),
-            $workerId
+            $workerId,
+            []
         );
     }
 
@@ -68,6 +70,12 @@ final readonly class EventSourcererTransport implements TransportInterface
     public function get(): iterable
     {
         foreach ($this->workerMessages->getFor($this->workerId) as $item) {
+            if ($this->processed[$item['allSequence']] ?? false) {
+                continue;
+            }
+
+            $this->processed[$item['allSequence']] = true;
+
             yield $this->serializer->decode($item);
         }
     }
