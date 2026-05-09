@@ -5,6 +5,7 @@ namespace EventSourcerer\ClientBundle\Command\Testing;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\Kernel;
 
 #[AsCommand(
     name: 'eventsourcerer:testing:check-worker-sequencing',
@@ -14,12 +15,14 @@ final readonly class ValidateWorkerSequencing
 {
     public function __invoke(SymfonyStyle $style): int
     {
+        $projectDir = Kernel::getProjectDir();
+
         $processed = [];
 
         $errorsFound = 0;
 
-        foreach (self::logFiles() as $logFile) {
-            $fh = fopen(__DIR__ . '/../../../var/log/' . $logFile, 'rb');
+        foreach (self::logFiles($projectDir) as $logFile) {
+            $fh = fopen($projectDir . '/var/log/' . $logFile, 'rb');
 
             while (!feof($fh)) {
                 $line = fgets($fh);
@@ -73,9 +76,9 @@ final readonly class ValidateWorkerSequencing
         return Command::SUCCESS;
     }
 
-    private static function logFiles(): iterable
+    private static function logFiles(string $projectDir): iterable
     {
-        $logsDir = __DIR__ . '/../../../var/log';
+        $logsDir = __DIR__ . '/var/log';
 
         foreach (scandir($logsDir) as $logFile) {
             if (preg_match('/worker-\d+\.log$/', $logFile)) {
