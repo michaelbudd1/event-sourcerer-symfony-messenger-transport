@@ -10,7 +10,12 @@ parameters:
   eventsourcerer.host: '%env(EVENTSOURCERER_HOST)%'
   eventsourcerer.port: '%env(int:EVENTSOURCERER_PORT)%'
   eventsourcerer.url: '%env(EVENTSOURCERER_URL)%'
-
+  eventsourcerer.secure: '%env(bool:EVENTSOURCERER_SECURE)%'
+  eventsourcerer.local_certificate_directory: '%env(EVENTSOURCERER_LOCAL_CERTIFICATE_DIRECTORY)%'
+  eventsourcerer.verify_peer: '%env(bool:EVENTSOURCERER_VERIFY_PEER)%'
+  eventsourcerer.verify_peer_name: '%env(bool:EVENTSOURCERER_VERIFY_PEER_NAME)%'
+  eventsourcerer.allow_self_signed: '%env(bool:EVENTSOURCERER_ALLOW_SELF_SIGNED)%'
+  eventsourcerer.certificate_authority_file: '%env(EVENTSOURCERER_CERTIFICATE_AUTHORITY_FILE)%'
 services:
   # default configuration for services in *this* file
   _defaults:
@@ -26,12 +31,12 @@ services:
       $url: '%eventsourcerer.url%'
       $port: '%eventsourcerer.port%'
       $applicationId: '%eventsourcerer.application_id%'
-
-  PearTreeWeb\EventSourcerer\Client\Infrastructure\Client:
-    factory: ['EventSourcerer\ClientBundle\Infrastructure\ClientFactory', 'create']
-    arguments:
-      $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
-      $dbalConnection: '@doctrine.dbal.default_connection'
+      $createSecure: '%eventsourcerer.secure%'
+      $localCertificateDirectory: '%kernel.project_dir%/%eventsourcerer.local_certificate_directory%'
+      $verifyPeer: '%eventsourcerer.verify_peer%'
+      $verifyPeerName: '%eventsourcerer.verify_peer_name%'
+      $allowSelfSigned: '%eventsourcerer.allow_self_signed%'
+      $cafile: '%eventsourcerer.certificate_authority_file%'
 
   EventSourcerer\ClientBundle\Transport\EventSourcererTransportFactory:
     tags: [ messenger.transport_factory ]

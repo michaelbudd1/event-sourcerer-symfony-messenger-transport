@@ -6,7 +6,6 @@ namespace EventSourcerer\ClientBundle\Transport;
 
 use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportFactoryInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
