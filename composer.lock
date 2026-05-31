@@ -808,12 +808,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/michaelbudd1/event-sorcerer-client.git",
-                "reference": "3a07465d3ae7720fa765246b89b5a38e596deec7"
+                "reference": "cd7797d062223fb96c44ed5f8c9e6d11ef4beacd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/michaelbudd1/event-sorcerer-client/zipball/3a07465d3ae7720fa765246b89b5a38e596deec7",
-                "reference": "3a07465d3ae7720fa765246b89b5a38e596deec7",
+                "url": "https://api.github.com/repos/michaelbudd1/event-sorcerer-client/zipball/cd7797d062223fb96c44ed5f8c9e6d11ef4beacd",
+                "reference": "cd7797d062223fb96c44ed5f8c9e6d11ef4beacd",
                 "shasum": ""
             },
             "require": {
@@ -855,7 +855,7 @@
                 "issues": "https://github.com/michaelbudd1/event-sorcerer-client/issues",
                 "source": "https://github.com/michaelbudd1/event-sorcerer-client/tree/main"
             },
-            "time": "2026-05-30T05:42:12+00:00"
+            "time": "2026-05-30T07:03:49+00:00"
         },
         {
             "name": "eventsourcerer/message-utilities",
