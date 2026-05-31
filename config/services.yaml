@@ -59,4 +59,7 @@ services:
   PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages:
     class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\PsrCacheWorkerMessages
 
+  PearTreeWeb\EventSourcerer\Client\Domain\Repository\StreamRepository:
+    class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\SocketStreamRepository
+
 
