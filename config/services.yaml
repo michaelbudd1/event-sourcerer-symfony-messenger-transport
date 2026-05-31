@@ -62,4 +62,9 @@ services:
   PearTreeWeb\EventSourcerer\Client\Domain\Repository\StreamRepository:
     class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\SocketStreamRepository
 
+  PearTreeWeb\EventSourcerer\Client\Infrastructure\Client:
+    class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Client
+    arguments:
+      $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
+
 
