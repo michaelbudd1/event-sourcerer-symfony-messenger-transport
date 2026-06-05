@@ -57,11 +57,10 @@ final class EventSourcererTransport implements TransportInterface
     private static function startListener(WorkerId $workerId): void
     {
         $process = new Process(
-            command: ['bin/console', ListenForEvents::COMMAND, $workerId->toString()],
+            command: ['bin/console', ListenForEvents::COMMAND, $workerId->toString(), (string) getmypid()],
             timeout: null,
         );
 
-        $process->setOptions(['create_new_console' => true]);
         $process->start();
 
         register_shutdown_function(static fn () => $process->stop());
