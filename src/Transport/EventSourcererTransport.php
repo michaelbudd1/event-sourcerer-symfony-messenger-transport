@@ -30,6 +30,7 @@ final class EventSourcererTransport implements TransportInterface
         private readonly WorkerMessages $workerMessages,
         private readonly mixed $localConnection,
         private readonly WorkerId $workerId,
+        private readonly Process $listenerProcess,
         private array $processed,
     ) {}
 
@@ -40,7 +41,7 @@ final class EventSourcererTransport implements TransportInterface
     ): self {
         $workerId = self::workerId();
 
-        self::startListener($workerId);
+        $process = self::startListener($workerId);
 
         sleep(2);
 
@@ -50,11 +51,12 @@ final class EventSourcererTransport implements TransportInterface
             $workerMessages,
             $client->createLocalConnection(),
             $workerId,
+            $process,
             []
         );
     }
 
-    private static function startListener(WorkerId $workerId): void
+    private static function startListener(WorkerId $workerId): Process
     {
         $process = new Process(
             command: ['bin/console', ListenForEvents::COMMAND, $workerId->toString(), (string) getmypid()],
@@ -64,10 +66,16 @@ final class EventSourcererTransport implements TransportInterface
         $process->start();
 
         register_shutdown_function(static fn () => $process->stop());
+
+        return $process;
     }
 
     public function get(): iterable
     {
+        if (!$this->listenerProcess->isRunning()) {
+            exit(1);
+        }
+
         foreach ($this->workerMessages->getFor($this->workerId) as $item) {
             if ($this->processed[$item['allSequence']] ?? false) {
                 continue;
