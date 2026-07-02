@@ -18,6 +18,10 @@ services:
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     bind:
 
+  _instanceof:
+    PearTreeWebLtd\EventSourcererMessageUtilities\Model\IsEvent:
+      tags: ['eventsourcerer.event']
+
   PearTreeWeb\EventSourcerer\Client\Infrastructure\Config:
     factory: ['EventSourcerer\ClientBundle\Infrastructure\ConfigFactory', 'create']
     arguments:
@@ -50,4 +54,5 @@ services:
   PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages:
     class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\PsrCacheWorkerMessages
 
-
+  PearTreeWebLtd\EventSourcererMessageUtilities\Service\ProvideEventClassPath:
+    class: EventSourcerer\ClientBundle\Service\SymfonyProvideEventClassPath
