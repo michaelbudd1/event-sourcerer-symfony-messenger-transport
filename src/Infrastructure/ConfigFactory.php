@@ -13,14 +13,26 @@ final readonly class ConfigFactory
         string $host,
         string $url,
         int $port,
-        string $applicationId
+        string $applicationId,
+        bool $createSecure,
+        ?string $localCertificateDirectory = null,
+        ?bool $verifyPeer = null,
+        ?bool $verifyPeerName = null,
+        ?bool $allowSelfSigned = null,
+        ?string $cafile = null
     ): Config {
         return new Config(
             ApplicationType::Symfony,
             $host,
             $url,
             $port,
-            $applicationId
+            $applicationId,
+            $createSecure,
+            $localCertificateDirectory,
+            $verifyPeer,
+            $verifyPeerName,
+            $allowSelfSigned,
+            $cafile
         );
     }
 }

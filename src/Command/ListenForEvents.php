@@ -7,6 +7,7 @@ namespace EventSourcerer\ClientBundle\Command;
 use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
 use PearTreeWebLtd\EventSourcererMessageUtilities\Model\WorkerId;
+use React\EventLoop\Loop;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -23,11 +24,11 @@ final readonly class ListenForEvents
     {
     }
 
-    public function __invoke(#[Argument] string $workerId, OutputInterface $output): int
+    public function __invoke(#[Argument] string $workerId, #[Argument] string $parentPid, OutputInterface $output): int
     {
         $workerIdObject = WorkerId::fromString($workerId);
 
-        $this->client->catchup($workerIdObject, $this->handleNewEvents());
+        $this->client->catchup($workerIdObject, $this->handleNewEvents((int) $parentPid));
 
         $output->writeln(
             sprintf(
@@ -36,12 +37,30 @@ final readonly class ListenForEvents
             )
         );
 
+        Loop::run();
+
         return Command::SUCCESS;
     }
 
-    private function handleNewEvents(): callable
+    private function handleNewEvents(int $parentPid): callable
     {
-        return function (array $decodedEvent): void {
+        return function (array $decodedEvent) use ($parentPid): void {
+            if (!posix_kill($parentPid, 0)) {
+                exit(0);
+            }
+            /**
+             * @var array{
+             *     allSequence: int,
+             *     eventVersion: int,
+             *     name: string,
+             *     number: int,
+             *     payload: array,
+             *     stream: string,
+             *     occurred: string,
+             *     workerId: string,
+             *     catchupRequestStream: string,
+             * } $decodedEvent
+             */
             $this->workerMessages->addFor(
                 WorkerId::fromString($decodedEvent['workerId']),
                 $decodedEvent

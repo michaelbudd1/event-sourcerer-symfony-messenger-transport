@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 use Symfony\Component\Process\Process;
 
-final readonly class EventSourcererTransport implements TransportInterface
+final class EventSourcererTransport implements TransportInterface
 {
     private const int WORKER_ID_RANDOM_BYTES_LENGTH = 5;
 
@@ -25,11 +25,13 @@ final readonly class EventSourcererTransport implements TransportInterface
      * @param resource $localConnection
      */
     private function __construct(
-        private Client $client,
-        private SerializerInterface $serializer,
-        private WorkerMessages $workerMessages,
-        private mixed $localConnection,
-        private WorkerId $workerId
+        private readonly Client $client,
+        private readonly SerializerInterface $serializer,
+        private readonly WorkerMessages $workerMessages,
+        private readonly mixed $localConnection,
+        private readonly WorkerId $workerId,
+        private readonly Process $listenerProcess,
+        private array $processed,
     ) {}
 
     public static function create(
@@ -39,7 +41,7 @@ final readonly class EventSourcererTransport implements TransportInterface
     ): self {
         $workerId = self::workerId();
 
-        self::startListener($workerId);
+        $process = self::startListener($workerId);
 
         sleep(2);
 
@@ -48,26 +50,39 @@ final readonly class EventSourcererTransport implements TransportInterface
             $serializer,
             $workerMessages,
             $client->createLocalConnection(),
-            $workerId
+            $workerId,
+            $process,
+            []
         );
     }
 
-    private static function startListener(WorkerId $workerId): void
+    private static function startListener(WorkerId $workerId): Process
     {
         $process = new Process(
-            command: ['bin/console', ListenForEvents::COMMAND, $workerId->toString()],
+            command: ['bin/console', ListenForEvents::COMMAND, $workerId->toString(), (string) getmypid()],
             timeout: null,
         );
 
-        $process->setOptions(['create_new_console' => true]);
         $process->start();
 
         register_shutdown_function(static fn () => $process->stop());
+
+        return $process;
     }
 
     public function get(): iterable
     {
+        if (!$this->listenerProcess->isRunning()) {
+            exit(1);
+        }
+
         foreach ($this->workerMessages->getFor($this->workerId) as $item) {
+            if ($this->processed[$item['allSequence']] ?? false) {
+                continue;
+            }
+
+            $this->processed[$item['allSequence']] = true;
+
             yield $this->serializer->decode($item);
         }
     }
