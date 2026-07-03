@@ -71,5 +71,4 @@ services:
     arguments:
       $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
 
-  EventSourcerer\EventSourcererCqrs\Factory\ReinstateEventFactory:
-    class: EventSourcerer\EventSourcererCqrs\Factory\ReinstateEventFactory
+
