@@ -24,7 +24,7 @@ services:
       $eventsourcererProjectDir: '%kernel.project_dir%'
 
   _instanceof:
-    PearTreeWebLtd\EventSourcererMessageUtilities\Model\IsEvent:
+    PearTreeWeb\EventSourcerer\Common\Model\IsEvent:
       tags: ['eventsourcerer.event']
 
   PearTreeWeb\EventSourcerer\Client\Infrastructure\Config:
@@ -55,7 +55,7 @@ services:
   PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages:
     class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\PsrCacheWorkerMessages
 
-  PearTreeWebLtd\EventSourcererMessageUtilities\Repository\StreamRepository:
+  PearTreeWeb\EventSourcerer\Common\Repository\StreamRepository:
     class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\SocketStreamRepository
 
   PearTreeWeb\EventSourcerer\Client\Infrastructure\Client:

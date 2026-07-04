@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace EventSourcerer\ClientBundle\Service;
 
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\EventName;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Service\ProvideEventClassPath;
+use PearTreeWeb\EventSourcerer\Common\Model\EventName;
+use PearTreeWeb\EventSourcerer\Common\Service\ProvideEventClassPath;
 
 final class SymfonyProvideEventClassPath implements ProvideEventClassPath
 {
