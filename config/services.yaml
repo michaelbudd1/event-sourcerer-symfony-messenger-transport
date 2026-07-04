@@ -28,7 +28,7 @@ services:
       tags: ['eventsourcerer.event']
 
   PearTreeWeb\EventSourcerer\Client\Infrastructure\Config:
-    factory: ['EventSourcerer\SymfonyClient\Infrastructure\ConfigFactory', 'create']
+    factory: ['PearTreeWeb\EventSourcerer\SymfonyClient\Infrastructure\ConfigFactory', 'create']
     arguments:
       $host: '%eventsourcerer.host%'
       $url: '%eventsourcerer.url%'
