@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\SymfonyClient;
+namespace PearTreeWeb\EventSourcerer\SymfonyClient;
 
 use PearTreeWeb\EventSourcerer\Common\Model\Event;
 
