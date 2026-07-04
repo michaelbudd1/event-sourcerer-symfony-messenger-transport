@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\SymfonyClient\Command;
+namespace PearTreeWeb\EventSourcerer\SymfonyClient\Command;
 
 use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;

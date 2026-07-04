@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\SymfonyClient\Infrastructure;
+namespace PearTreeWeb\EventSourcerer\SymfonyClient\Infrastructure;
 
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Config;
 use PearTreeWeb\EventSourcerer\Common\Model\ApplicationType;

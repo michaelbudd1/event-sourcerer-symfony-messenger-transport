@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\SymfonyClient\Transport;
+namespace PearTreeWeb\EventSourcerer\SymfonyClient\Transport;
 
 use EventSourcerer\SymfonyClient\Command\ListenForEvents;
 use EventSourcerer\SymfonyClient\NewMessage;

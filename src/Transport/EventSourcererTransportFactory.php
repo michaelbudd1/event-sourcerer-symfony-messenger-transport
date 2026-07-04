@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\SymfonyClient\Transport;
+namespace PearTreeWeb\EventSourcerer\SymfonyClient\Transport;
 
 use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;

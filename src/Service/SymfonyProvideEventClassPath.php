@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\ClientBundle\Service;
+namespace PearTreeWeb\EventSourcerer\SymfonyClient\Service;
 
 use PearTreeWeb\EventSourcerer\Common\Model\EventName;
 use PearTreeWeb\EventSourcerer\Common\Service\ProvideEventClassPath;
