@@ -1,6 +1,6 @@
 <?php
 
-namespace EventSourcerer\ClientBundle\Command\Testing;
+namespace EventSourcerer\SymfonyClient\Command\Testing;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

@@ -24,7 +24,7 @@ services:
       $eventsourcererProjectDir: '%kernel.project_dir%'
 
   PearTreeWeb\EventSourcerer\Client\Infrastructure\Config:
-    factory: ['EventSourcerer\ClientBundle\Infrastructure\ConfigFactory', 'create']
+    factory: ['EventSourcerer\SymfonyClient\Infrastructure\ConfigFactory', 'create']
     arguments:
       $host: '%eventsourcerer.host%'
       $url: '%eventsourcerer.url%'
@@ -37,22 +37,14 @@ services:
       $allowSelfSigned: '%eventsourcerer.allow_self_signed%'
       $cafile: '%eventsourcerer.certificate_authority_file%'
 
-  EventSourcerer\ClientBundle\Transport\EventSourcererTransportFactory:
+  EventSourcerer\SymfonyClient\Transport\EventSourcererTransportFactory:
     tags: [ messenger.transport_factory ]
 
-  EventSourcerer\ClientBundle\Command\ListenForEvents:
+  EventSourcerer\SymfonyClient\Command\ListenForEvents:
     tags:
       - { name: console.command }
 
-  EventSourcerer\ClientBundle\Command\GetSummary:
-    tags:
-      - { name: console.command }
-
-  EventSourcerer\ClientBundle\Command\ListAllEvents:
-    tags:
-      - { name: console.command }
-
-  EventSourcerer\ClientBundle\Command\Testing\ValidateWorkerSequencing:
+  EventSourcerer\SymfonyClient\Command\Testing\ValidateWorkerSequencing:
     tags:
       - { name: console.command }
 

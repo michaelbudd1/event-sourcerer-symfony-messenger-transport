@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\ClientBundle\Transport;
+namespace EventSourcerer\SymfonyClient\Transport;
 
-use EventSourcerer\ClientBundle\Command\ListenForEvents;
-use EventSourcerer\ClientBundle\NewMessage;
-use EventSourcerer\ClientBundle\ProcessEvent;
+use EventSourcerer\SymfonyClient\Command\ListenForEvents;
+use EventSourcerer\SymfonyClient\NewMessage;
+use EventSourcerer\SymfonyClient\ProcessEvent;
 use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\Event;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\StreamId;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\WorkerId;
+use PearTreeWeb\EventSourcerer\Common\Model\Event;
+use PearTreeWeb\EventSourcerer\Common\Model\StreamId;
+use PearTreeWeb\EventSourcerer\Common\Model\WorkerId;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;

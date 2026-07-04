@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\ClientBundle\Infrastructure;
+namespace EventSourcerer\SymfonyClient\Infrastructure;
 
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Config;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\ApplicationType;
+use PearTreeWeb\EventSourcerer\Common\Model\ApplicationType;
 
 final readonly class ConfigFactory
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\ClientBundle\Transport;
+namespace EventSourcerer\SymfonyClient\Transport;
 
-use EventSourcerer\ClientBundle\ProcessEvent;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\Checkpoint;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\Event;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\EventName;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\EventVersion;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\StreamId;
+use EventSourcerer\SymfonyClient\ProcessEvent;
+use PearTreeWeb\EventSourcerer\Common\Model\Checkpoint;
+use PearTreeWeb\EventSourcerer\Common\Model\Event;
+use PearTreeWeb\EventSourcerer\Common\Model\EventName;
+use PearTreeWeb\EventSourcerer\Common\Model\EventVersion;
+use PearTreeWeb\EventSourcerer\Common\Model\StreamId;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\TransportMessageIdStamp;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;

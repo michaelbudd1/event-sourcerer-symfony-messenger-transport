@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\ClientBundle;
+namespace EventSourcerer\SymfonyClient;
 
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\EventName;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\EventVersion;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\StreamId;
+use PearTreeWeb\EventSourcerer\Common\Model\EventName;
+use PearTreeWeb\EventSourcerer\Common\Model\EventVersion;
+use PearTreeWeb\EventSourcerer\Common\Model\StreamId;
 
 final readonly class NewMessage
 {

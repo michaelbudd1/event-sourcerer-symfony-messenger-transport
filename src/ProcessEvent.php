@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\ClientBundle;
+namespace EventSourcerer\SymfonyClient;
 
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\Event;
+use PearTreeWeb\EventSourcerer\Common\Model\Event;
 
 final readonly class ProcessEvent
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace EventSourcerer\ClientBundle\Command;
+namespace EventSourcerer\SymfonyClient\Command;
 
 use PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages;
 use PearTreeWeb\EventSourcerer\Client\Infrastructure\Client;
-use PearTreeWebLtd\EventSourcererMessageUtilities\Model\WorkerId;
+use PearTreeWeb\EventSourcerer\Common\Model\WorkerId;
 use React\EventLoop\Loop;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
