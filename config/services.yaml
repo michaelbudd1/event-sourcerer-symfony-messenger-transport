@@ -23,6 +23,10 @@ services:
     bind:
       $eventsourcererProjectDir: '%kernel.project_dir%'
 
+  _instanceof:
+    PearTreeWebLtd\EventSourcererMessageUtilities\Model\IsEvent:
+      tags: ['eventsourcerer.event']
+
   PearTreeWeb\EventSourcerer\Client\Infrastructure\Config:
     factory: ['EventSourcerer\SymfonyClient\Infrastructure\ConfigFactory', 'create']
     arguments:
@@ -51,7 +55,7 @@ services:
   PearTreeWeb\EventSourcerer\Client\Domain\Repository\WorkerMessages:
     class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\PsrCacheWorkerMessages
 
-  PearTreeWeb\EventSourcerer\Client\Domain\Repository\StreamRepository:
+  PearTreeWebLtd\EventSourcererMessageUtilities\Repository\StreamRepository:
     class: PearTreeWeb\EventSourcerer\Client\Infrastructure\Repository\SocketStreamRepository
 
   PearTreeWeb\EventSourcerer\Client\Infrastructure\Client:
@@ -59,4 +63,4 @@ services:
     arguments:
       $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
 
-
+#  EventSourcerer\EventSourcererCqrs\Factory\ReinstantiateAggregate:
