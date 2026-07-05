@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../event-sourcerer-symfony-client">
+      <sourceFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/src" isTestSource="false" packagePrefix="EventSourcerer\SymfonyClient\" />
+      <sourceFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/tests" isTestSource="true" packagePrefix="EventSourcerer\SymfonyClient\Tests\" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/evenement/evenement" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/eventsourcerer/common" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/eventsourcerer/event-sourcerer-client" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/illuminate/collections" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/illuminate/conditionable" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/illuminate/contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/illuminate/macroable" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/nikic/php-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/phpunit/php-file-iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/phpunit/php-invoker" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/phpunit/php-text-template" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/phpunit/php-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/phpunit/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/psr/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/psr/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/psr/container" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/psr/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/psr/simple-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/react/async" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/react/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/react/dns" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/react/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/react/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/react/socket" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/react/stream" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/revolt/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/cli-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/comparator" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/complexity" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/diff" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/environment" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/global-state" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/lines-of-code" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/object-enumerator" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/object-reflector" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/recursion-context" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/type" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/staabm/side-effects-detector" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/cache-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/console" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/dependency-injection" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/deprecation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/error-handler" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/event-dispatcher-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/http-client-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/http-foundation" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/http-kernel" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/lock" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/messenger" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/polyfill-deepclone" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/polyfill-intl-grapheme" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/polyfill-intl-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/polyfill-php84" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/polyfill-php85" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/polyfill-php86" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/service-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/string" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/var-dumper" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/symfony/var-exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/../event-sourcerer-symfony-client/vendor/theseer/tokenizer" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

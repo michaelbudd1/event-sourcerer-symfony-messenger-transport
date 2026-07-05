@@ -22,6 +22,7 @@ services:
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     bind:
       $eventsourcererProjectDir: '%kernel.project_dir%'
+      iterable $eventTemplates: !tagged_iterator eventsourcerer.event
 
   _instanceof:
     PearTreeWeb\EventSourcerer\Common\Model\IsEvent:
@@ -63,4 +64,7 @@ services:
     arguments:
       $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
 
-#  EventSourcerer\EventSourcererCqrs\Factory\ReinstantiateAggregate:
+  PearTreeWeb\EventSourcerer\Common\Service\ProvideEventClassPath:
+    class: PearTreeWeb\EventSourcerer\SymfonyClient\Service\SymfonyProvideEventClassPath
+    arguments:
+      $eventTemplates: '@iterable $eventTemplates'
