@@ -63,4 +63,4 @@ services:
     arguments:
       $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
 
-#  EventSourcerer\EventSourcererCqrs\Factory\ReinstantiateAggregate:
+  PearTreeWeb\EventSourcerer\Common\Factory\ReinstantiateAggregate:
