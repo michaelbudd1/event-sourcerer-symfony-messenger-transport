@@ -16,7 +16,12 @@ final readonly class SymfonyProvideEventClassPath implements ProvideEventClassPa
 
     public function for(EventName $eventName): string
     {
-        dd($eventTemplates);
-        // TODO: Implement for() method.
+        foreach ($this->eventTemplates as $event) {
+            if ($event::name() === (string) $eventName) {
+                return $event::class;
+            }
+        }
+
+        throw new \RuntimeException(sprintf('Event "%s" not found.', (string) $eventName));
     }
 }

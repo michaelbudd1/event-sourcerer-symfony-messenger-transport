@@ -23,10 +23,6 @@ services:
     bind:
       $eventsourcererProjectDir: '%kernel.project_dir%'
 
-  _instanceof:
-    PearTreeWeb\EventSourcerer\Common\Model\IsEvent:
-      tags: ['eventsourcerer.event']
-
   PearTreeWeb\EventSourcerer\Client\Infrastructure\Config:
     factory: ['PearTreeWeb\EventSourcerer\SymfonyClient\Infrastructure\ConfigFactory', 'create']
     arguments:
