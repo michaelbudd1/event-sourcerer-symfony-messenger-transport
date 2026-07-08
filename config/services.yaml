@@ -63,4 +63,9 @@ services:
     arguments:
       $config: '@PearTreeWeb\EventSourcerer\Client\Infrastructure\Config'
 
+  PearTreeWeb\EventSourcerer\Common\Service\ProvideEventClassPath:
+    class: PearTreeWeb\EventSourcerer\SymfonyClient\Service\SymfonyProvideEventClassPath
+    arguments:
+      $eventTemplates: !tagged_iterator eventsourcerer.event
+
   PearTreeWeb\EventSourcerer\Common\Factory\ReinstantiateAggregate:
